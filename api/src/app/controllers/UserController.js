@@ -7,16 +7,7 @@ class UserController {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string().email().required(),
-      password: Yup.string().required().min(6),
-      cpf: Yup.number().required().min(6),
-      phone: Yup.number().required().min(6),
-      zipcode: Yup.number().min(6),
-      state: Yup.string().min(6),
-      city: Yup.string().min(6),
-      district: Yup.string().min(6),
-      adress: Yup.string().min(6),
-      number: Yup.number().min(1),
-      complement: Yup.string().min(6),
+      password: Yup.string().required().min(6)
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -34,31 +25,14 @@ class UserController {
       name, 
       email,
       password, 
-      cpf, 
-      phone, 
-      zipcode, 
-      state, 
-      city, 
-      district, 
-      adress, 
-      number, 
-      complement, 
       provider } = await User.create(req.body);
+
 
     return res.json({
       id, 
       name, 
       email,
-      password, 
-      cpf, 
-      phone, 
-      zipcode, 
-      state, 
-      city, 
-      district, 
-      adress, 
-      number, 
-      complement, 
+      password,
       provider
     });
   }

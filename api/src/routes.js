@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import multer from 'multer';
-import multerConfig from './config/multer';
+import multerConfig from './config/multerConfig';
 
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
-import FileController from './app/controllers/FileController';
+import FileController from './app/controllers/FileUserController';
 
 
 import authMiddleware from './app/middlewares/auth';
