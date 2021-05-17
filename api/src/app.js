@@ -5,6 +5,9 @@ import path from 'path';
 import 'express-async-errors';
 import routes from './routes';
 
+import anuncianteAnuncianteRoutes from './app/routes/AnuncianteAnuncianteRoutes';
+import anuncianteCategoriaRoutes from './app/routes/AnuncianteCategoriaRoutes';
+
 import './database';
 
 class App {
@@ -26,6 +29,8 @@ class App {
 
   routes() {
     this.server.use(routes);
+    this.server.use('/anunciante/', anuncianteAnuncianteRoutes);
+    this.server.use('/anunciante/categoria', anuncianteCategoriaRoutes)
   }
 
   exceptionHanler() {
