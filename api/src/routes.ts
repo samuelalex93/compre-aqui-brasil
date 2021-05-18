@@ -1,13 +1,11 @@
 import { Router } from "express";
 
-import { UsuarioUsuarioController } from "./controllers/UsuarioUsuarioController";
+import { usuarioUsuarioRoutes } from './routes/usuarioUsuarioRoutes';
+import { anuncianteAnuncianteRoutes } from './routes/anuncianteAnuncianteRoutes';
 
 const routes = Router();
 
-const usersController = new UsuarioUsuarioController();
-
-routes.post("/users", usersController.create);
-
-routes.get("/users", usersController.findOne);
+routes.use('/usuario', usuarioUsuarioRoutes);
+routes.use('/anunciante', anuncianteAnuncianteRoutes);
 
 export { routes };

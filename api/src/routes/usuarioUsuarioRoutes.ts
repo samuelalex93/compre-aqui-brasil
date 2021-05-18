@@ -5,8 +5,8 @@ const usuarioUsuarioRoutes = Router();
 
 const usuarioController = new UsuarioUsuarioController();
 
-usuarioUsuarioRoutes.post("", usuarioController.create);
+usuarioUsuarioRoutes.post("/", usuarioController.create);
 
-usuarioUsuarioRoutes.get("", usuarioController.findOne);
+usuarioUsuarioRoutes.get("/", usuarioController.findOne);
 
 export { usuarioUsuarioRoutes };

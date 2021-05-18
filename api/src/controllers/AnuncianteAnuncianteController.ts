@@ -6,14 +6,13 @@ class AnuncianteAnuncianteController {
   async create (req: Request, res: Response): Promise<Response> {
     const _anunciante = req.body;
     const anuncianteAnunciante = new AnuncianteAnuncianteService();
-
-    try { 
+    
+    try {
       const anunciante = await anuncianteAnunciante.create(_anunciante);
-
       return res.json(anunciante);
     } catch (err) {
       res.status(400).json({ 
-        message: err.message 
+        message: err
       });
     }
   }

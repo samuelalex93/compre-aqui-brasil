@@ -13,15 +13,17 @@ class AnuncianteAnuncianteService {
   }
   async create(_anunciante: AnuncianteAnunciante) {
 
-    // const schema = Yup.object().shape({
-    //   problem: Yup.string().required(),
-    //   message: Yup.string().required(),
-    //   email: Yup.string().email().required(),
-    // });
+    const schema = Yup.object().shape({
+      problem: Yup.string().required(),
+      message: Yup.string().required(),
+      email: Yup.string().email().required(),
+    });
 
-    // if (!(await schema.isValid(req.body))) {
-    //   return res.status(400).json({ error: 'Validation fails' });
-    // }
+    if (!(await schema.isValid(_anunciante))) {
+      throw 'Validation fails';
+    }
+
+    return;
 
     const { 
       id, 
