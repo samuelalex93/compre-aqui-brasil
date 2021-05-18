@@ -1,36 +1,36 @@
 import { getCustomRepository, Repository } from 'typeorm';
 
-import { GeoPais } from './../entities/GeoPais';
-import { GeoPaisRepository } from '../repositories/GeoPaisRepository';
+import { GeoEstado } from './../entities/GeoEstado';
+import { GeoEstadoRepository } from '../repositories/GeoEstadoRepository';
 
-class GeoPaisService {
-  private geoPaisRepository: Repository<GeoPais>;
+class GeoEstadoService {
+  private geoEstadoRepository: Repository<GeoEstado>;
 
   constructor() {
-    this.geoPaisRepository = getCustomRepository(GeoPaisRepository);
+    this.geoEstadoRepository = getCustomRepository(GeoEstadoRepository);
   }
 
-  async create(_pais: GeoPais) {  
+  async create(_estado: GeoEstado) {  
     
-    const { nome } = _pais;
-    const paisAlreadyExists = await this.geoPaisRepository.findOne({nome});
+    const { nome } = _estado;
+    const estadoAlreadyExists = await this.geoEstadoRepository.findOne({nome});
 
-    if(paisAlreadyExists) {
-      return paisAlreadyExists;
+    if(estadoAlreadyExists) {
+      return estadoAlreadyExists;
     }
 
-    const pais = await this.geoPaisRepository.create(_pais);
+    const estado = await this.geoEstadoRepository.create(_estado);
 
-    await this.geoPaisRepository.save(pais);
+    await this.geoEstadoRepository.save(estado);
 
-    return pais;
+    return estado;
   }
 
   async findByName(nome: string) {  
-    const pais = await this.geoPaisRepository.findOne({ nome });
+    const estado = await this.geoEstadoRepository.findOne({ nome });
 
-    return pais;
+    return estado;
   }
 }
 
-export { GeoPaisService };
+export { GeoEstadoService };
