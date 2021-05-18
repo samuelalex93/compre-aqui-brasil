@@ -13,10 +13,10 @@ class VendedorVendedorService {
   async create(_vendedor: VendedorVendedor) {  
     
     const { email } = _vendedor;
-    const userAlreadyExists = await this.vendedorVendedorRepository.findOne({email});
+    const vendedorAlreadyExists = await this.vendedorVendedorRepository.findOne({email});
 
-    if(userAlreadyExists) {
-      return userAlreadyExists;
+    if(vendedorAlreadyExists) {
+      return vendedorAlreadyExists;
     }
 
     const vendedor = await this.vendedorVendedorRepository.create(_vendedor);
