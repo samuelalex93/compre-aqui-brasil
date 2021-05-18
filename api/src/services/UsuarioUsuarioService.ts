@@ -10,20 +10,33 @@ class UsuarioUsuarioService {
     this.usuarioUsuarioRepository = getCustomRepository(UsuarioUsuarioRepository);
   }
 
-  async create(_user: UsuarioUsuario) {  
-    
-    const { email } = _user;
-    const userAlreadyExists = await this.usuarioUsuarioRepository.findOne({email});
+  async create(params: UsuarioUsuario) {
 
+    let _usuario = new UsuarioUsuario();
+    _usuario.email = params.email;
+    _usuario.password = params.password;
+    _usuario.username = params.username;
+    _usuario.lastName = params.lastName;
+    _usuario.firstName = params.firstName;
+    _usuario.isStaff = params.isStaff;
+    _usuario.isActive = params.isActive;
+    _usuario.lastLogin = params.lastLogin;
+    _usuario.isSuperuser = params.isSuperuser;
+    _usuario.dateJoined = params.dateJoined;
+    
+    _usuario.hashPassword();
+
+    const userAlreadyExists = await this.usuarioUsuarioRepository.findOne({email: _usuario.email});
+  
     if(userAlreadyExists) {
       return userAlreadyExists;
     }
 
-    const user = await this.usuarioUsuarioRepository.create(_user);
+    const usuario = await this.usuarioUsuarioRepository.create(_usuario);
 
-    await this.usuarioUsuarioRepository.save(user);
+    await this.usuarioUsuarioRepository.save(usuario);
 
-    return user;
+    return usuario;
   }
 
   async findByEmail(email: string) {  
