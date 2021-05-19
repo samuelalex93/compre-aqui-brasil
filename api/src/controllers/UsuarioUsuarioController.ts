@@ -9,12 +9,9 @@ class UsuarioUsuarioController {
 
     try { 
       const user = await usuarioUsuarioService.create(_user);
-
       return res.json(user);
-    } catch (err) {
-      res.status(400).json({ 
-        message: err.message 
-      });
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
     }
   }
 
@@ -28,7 +25,7 @@ class UsuarioUsuarioController {
       return res.json(user);
     } catch (err) {
       res.status(400).json({ 
-        message: err.message 
+        message: err 
       });
     }
   }

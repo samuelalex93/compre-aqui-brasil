@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-//import * as pbkdf2 from "pbkdf2";
+import * as pbkdf2 from "pbkdf2";
 import * as crypto from "crypto";
 
 import { AnuncianteAnunciante } from "./AnuncianteAnunciante";
@@ -100,30 +100,26 @@ export class UsuarioUsuario {
   vendedorVendedors: VendedorVendedor[];
 
   hashPassword() {
-    // let password = pbkdf2.pbkdf2Sync(this.password, 'p9Tkr6uqxKtf', 150000, 32, 'sha256');
-
-    // this.password = password.toString('base64');
-
-    var algorithm = "pbkdf2_sha256";
+    let algorithm = "pbkdf2_sha256";
     let salt = "p9Tkr6uqxKtf";
     let iterations = 150000;
 
-    crypto.pbkdf2(this.password, salt, iterations, 32, "sha256", (err, derivedKey) => {
-      if (err) throw err;
-      let finalPass = algorithm +'$'+ iterations +'$'+  salt +'$'+ derivedKey.toString("base64");
-      this.password = finalPass;
-    });
+    const hashPassword = pbkdf2
+      .pbkdf2Sync(this.password, salt, iterations, 32, "sha256")
+      .toString("base64");
+
+    let finalPass = algorithm +'$'+ iterations +'$'+  salt +'$'+ hashPassword;
+    this.password = finalPass;
   }
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
-    let parts = unencryptedPassword.split("$");
+    let parts = this.password.split("$");
     let iterations = parts[1];
     let salt = parts[2];
-    const hashPassword:string | any =  crypto.pbkdf2(this.password, salt, Number(iterations), 32, "sha256", (err, derivedKey) => {
-      if (err) throw err;
-      derivedKey.toString("base64");
-    });
+    const hashPassword = pbkdf2
+      .pbkdf2Sync(unencryptedPassword, Buffer.from(salt), Number(iterations), 32, "sha256")
+      .toString("base64");
+      
     return hashPassword === parts[3];
   }
-
 }
