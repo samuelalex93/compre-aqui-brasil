@@ -6,5 +6,6 @@ const loginRoutes = Router();
 const authController = new AuthController();
 
 loginRoutes.post("/", authController.login);
+loginRoutes.post("/changePassword", authController.changePassword);
 
 export { loginRoutes };

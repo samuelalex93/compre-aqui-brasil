@@ -7,7 +7,6 @@ import {
 } from "typeorm";
 
 import * as pbkdf2 from "pbkdf2";
-import * as crypto from "crypto";
 
 import { AnuncianteAnunciante } from "./AnuncianteAnunciante";
 import { AuditoriaLogentry } from "./AuditoriaLogentry";

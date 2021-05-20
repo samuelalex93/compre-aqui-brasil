@@ -11,6 +11,9 @@ usuarioUsuarioRoutes.post("/", usuarioController.create);
 
 usuarioUsuarioRoutes.use(checkJwt);
 
-usuarioUsuarioRoutes.get("/", usuarioController.findOne);
+usuarioUsuarioRoutes.get("/", usuarioController.listAll);
+usuarioUsuarioRoutes.put("/:id", usuarioController.update);
+usuarioUsuarioRoutes.get("/:id", usuarioController.findById);
+usuarioUsuarioRoutes.delete("/:id", usuarioController.delete);
 
 export { usuarioUsuarioRoutes };

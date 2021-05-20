@@ -24,7 +24,7 @@ class AuthService {
       throw new CustomError({
         code: 'DATA_NOT_REPORTED',
         message: 'Data not reported',
-        status: 404,
+        status: 401,
       });
     }
 
@@ -58,6 +58,45 @@ class AuthService {
     )};
 
     return token;
+  }
+
+  async changePassword(id: string, params: any) {
+    let _usuario = new UsuarioUsuario();
+
+    const { oldPassword, newPassword } = params;
+
+    if (!(oldPassword && newPassword)) {
+      throw new CustomError({
+        code: 'DATA_NOT_REPORTED',
+        message: 'Data not reported',
+        status: 401,
+      });
+    }
+
+    try {
+      _usuario = await this.usuarioUsuarioRepository.findOneOrFail(id)
+    } catch {
+      throw new CustomError({
+        code: 'USER_NOT_FOUND',
+        message: 'User not found',
+        status: 404,
+      });
+    }
+
+    if (!_usuario.checkIfUnencryptedPasswordIsValid(oldPassword)) {
+      throw new CustomError({
+        code: 'INCORRECT PASSWORD',
+        message: 'Incorrect Password',
+        status: 401,
+      });
+    }
+
+    _usuario.password = newPassword;
+    _usuario.hashPassword();
+    
+    const usuario = await this.usuarioUsuarioRepository.save(_usuario);
+
+    return usuario;
   }
 }
 
