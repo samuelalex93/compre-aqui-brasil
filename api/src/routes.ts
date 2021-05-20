@@ -3,6 +3,7 @@ import { Router } from "express";
 import { usuarioUsuarioRoutes } from './routes/usuarioUsuarioRoutes';
 import { anuncianteAnuncianteRoutes } from './routes/anuncianteAnuncianteRoutes';
 import { loginRoutes } from './routes/loginRoutes';
+import { geoRoutes } from './routes/geoRoutes';
 
 import { checkJwt } from "./middleware/auth";
 
@@ -14,5 +15,6 @@ routes.use('/usuario',usuarioUsuarioRoutes);
 routes.use(checkJwt);
 
 routes.use('/anunciante', anuncianteAnuncianteRoutes);
+routes.use('/', geoRoutes);
 
 export { routes };

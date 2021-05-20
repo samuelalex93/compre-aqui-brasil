@@ -16,7 +16,7 @@ class UsuarioUsuarioController {
   }
 
   async findByEmail(req: Request, res: Response): Promise<Response> {
-    const { email } = req.body;
+    const { email } = req.params;
     const usuarioUsuarioService = new UsuarioUsuarioService();
 
     try { 
@@ -29,7 +29,7 @@ class UsuarioUsuarioController {
   }
 
   async findById(req: Request, res: Response): Promise<Response> {
-    const id = req.params.id;
+    const { id } = req.params;
     const usuarioUsuarioService = new UsuarioUsuarioService();
 
     try { 
@@ -42,7 +42,7 @@ class UsuarioUsuarioController {
   }
 
   async update(req: Request, res: Response): Promise<Response> {
-    const id = req.params.id;
+    const { id } = req.params;
     const _usuario = req.body;
     const usuarioUsuarioService = new UsuarioUsuarioService();
 
@@ -68,7 +68,7 @@ class UsuarioUsuarioController {
   }
 
   async delete(req: Request, res: Response): Promise<Response> {
-    const id = req.params.id;
+    const { id } = req.params;
     const usuarioUsuarioService = new UsuarioUsuarioService();
 
     try { 

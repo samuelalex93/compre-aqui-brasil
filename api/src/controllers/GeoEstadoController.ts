@@ -3,33 +3,26 @@ import { Request, Response } from "express";
 import { GeoEstadoService } from "../services/GeoEstadoService";
 
 class GeoEstadoController {
-  async create (req: Request, res: Response): Promise<Response> {
-    const _estado = req.body;
+  async listAll (req: Request, res: Response): Promise<Response> {
     const geoEstadoService = new GeoEstadoService();
 
     try { 
-      const estado = await geoEstadoService.create(_estado);
-
-      return res.json(estado);
-    } catch (err) {
-      res.status(400).json({ 
-        message: err.message 
-      });
+      const response = await geoEstadoService.listAll();
+      return res.json(response);
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
     }
   }
 
   async findOne(req: Request, res: Response): Promise<Response> {
-    const { nome } = req.body;
+    const { id } = req.params;
     const geoEstadoService = new GeoEstadoService();
 
     try { 
-      const estado = await geoEstadoService.findByName(nome);
-
-      return res.json(estado);
-    } catch (err) {
-      res.status(400).json({ 
-        message: err.message 
-      });
+      const response = await geoEstadoService.findById(id);
+      return res.json(response);
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm';
+import { CustomError } from 'express-handler-errors';
 
 import { GeoCidade } from './../entities/GeoCidade';
 import { GeoCidadeRepository } from '../repositories/GeoCidadeRepository';
@@ -10,25 +11,71 @@ class GeoCidadeService {
     this.geoCidadeRepository = getCustomRepository(GeoCidadeRepository);
   }
 
-  async create(_cidade: GeoCidade) {  
+  async listAll(page: number) {
+    let skip = 0;
+    let take = 50;
     
-    const { nome } = _cidade;
-    const cidadeAlreadyExists = await this.geoCidadeRepository.findOne({nome});
-
-    if(cidadeAlreadyExists) {
-      return cidadeAlreadyExists;
+    if(page > 1) {
+      skip = take * (page -1);
     }
 
-    const cidade = await this.geoCidadeRepository.create(_cidade);
+    const [data , count] = await this.geoCidadeRepository.findAndCount({
+      order: {
+        nome: 'ASC'
+      },
+      skip,
+      take
+    });
 
-    await this.geoCidadeRepository.save(cidade);
+    if(!data) {
+      throw new CustomError({
+        code: 'NO_CONTENT',
+        message: 'No Content',
+        status: 204,
+      });
+    }
 
-    return cidade;
+    return { data, count };
   }
 
-  async findByName(nome: string) {  
-    const cidade = await this.geoCidadeRepository.findOne({ nome });
+  async findByEstado(page?: number, estadoId?: number) {
+    let skip = 0;
+    let take = 50;
+    
+    if(page > 1) {
+      skip = take * (page -1);
+    }
 
+    const [data , count] = await this.geoCidadeRepository.findAndCount({
+      where : { estadoId },
+      order: {
+        nome: 'ASC'
+      },
+      skip,
+      take
+    });
+    
+
+    if(!data) {
+      throw new CustomError({
+        code: 'NO_CONTENT',
+        message: 'No Content',
+        status: 204,
+      });
+    }
+
+    return { data, count };
+  }
+
+  async findById(id: string) {
+    const cidade = await this.geoCidadeRepository.findOne(id);
+    if(!cidade)
+      throw new CustomError({
+        code: 'USER_NOT_FOUND',
+        message: 'User not found',
+        status: 404,
+      });
+    
     return cidade;
   }
 }

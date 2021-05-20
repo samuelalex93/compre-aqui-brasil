@@ -3,33 +3,43 @@ import { Request, Response } from "express";
 import { GeoCidadeService } from "../services/GeoCidadeService";
 
 class GeoCidadeController {
-  async create (req: Request, res: Response): Promise<Response> {
-    const _cidade = req.body;
+  async listAll (req: Request, res: Response): Promise<Response> {
+    const { page } = req.query;
     const geoCidadeService = new GeoCidadeService();
 
     try { 
-      const cidade = await geoCidadeService.create(_cidade);
+      const response = await geoCidadeService.listAll(<any>page);
 
-      return res.json(cidade);
-    } catch (err) {
-      res.status(400).json({ 
-        message: err.message 
-      });
+      return res.json(response);
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
+    }
+  }
+
+  async findByEstado (req: Request, res: Response): Promise<Response> {
+    const { page } = req.query;
+    const estadoId = req.params.id;
+    const geoCidadeService = new GeoCidadeService();
+
+    try { 
+      const response = await geoCidadeService.findByEstado(<any>page, <any>estadoId);
+
+      return res.json(response);
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
     }
   }
 
   async findOne(req: Request, res: Response): Promise<Response> {
-    const { nome } = req.body;
+    const { id } = req.params;
     const geoCidadeService = new GeoCidadeService();
 
     try { 
-      const cidade = await geoCidadeService.findByName(nome);
+      const response = await geoCidadeService.findById(id);
 
-      return res.json(cidade);
-    } catch (err) {
-      res.status(400).json({ 
-        message: err.message 
-      });
+      return res.json(response);
+    } catch (e) {
+      return res.status(e.error.status).json(e.error.message);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm';
+import { CustomError } from 'express-handler-errors';
 
 import { GeoEstado } from './../entities/GeoEstado';
 import { GeoEstadoRepository } from '../repositories/GeoEstadoRepository';
@@ -10,25 +11,29 @@ class GeoEstadoService {
     this.geoEstadoRepository = getCustomRepository(GeoEstadoRepository);
   }
 
-  async create(_estado: GeoEstado) {  
-    
-    const { nome } = _estado;
-    const estadoAlreadyExists = await this.geoEstadoRepository.findOne({nome});
+  async listAll() {
+    const estados = await this.geoEstadoRepository.find();
 
-    if(estadoAlreadyExists) {
-      return estadoAlreadyExists;
+    if(!estados) {
+      throw new CustomError({
+        code: 'NO_CONTENT',
+        message: 'No Content',
+        status: 204,
+      });
     }
 
-    const estado = await this.geoEstadoRepository.create(_estado);
-
-    await this.geoEstadoRepository.save(estado);
-
-    return estado;
+    return estados;
   }
 
-  async findByName(nome: string) {  
-    const estado = await this.geoEstadoRepository.findOne({ nome });
-
+  async findById(id: string) {
+    const estado = await this.geoEstadoRepository.findOne(id);
+    if(!estado)
+      throw new CustomError({
+        code: 'USER_NOT_FOUND',
+        message: 'User not found',
+        status: 404,
+      });
+    
     return estado;
   }
 }

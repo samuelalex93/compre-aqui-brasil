@@ -1,4 +1,5 @@
 import { getCustomRepository, Repository } from 'typeorm';
+import { CustomError } from 'express-handler-errors';
 
 import { GeoPais } from './../entities/GeoPais';
 import { GeoPaisRepository } from '../repositories/GeoPaisRepository';
@@ -10,25 +11,29 @@ class GeoPaisService {
     this.geoPaisRepository = getCustomRepository(GeoPaisRepository);
   }
 
-  async create(_pais: GeoPais) {  
-    
-    const { nome } = _pais;
-    const paisAlreadyExists = await this.geoPaisRepository.findOne({nome});
+  async listAll() {
+    const paises = await this.geoPaisRepository.find();
 
-    if(paisAlreadyExists) {
-      return paisAlreadyExists;
+    if(!paises) {
+      throw new CustomError({
+        code: 'NO_CONTENT',
+        message: 'No Content',
+        status: 204,
+      });
     }
 
-    const pais = await this.geoPaisRepository.create(_pais);
-
-    await this.geoPaisRepository.save(pais);
-
-    return pais;
+    return paises;
   }
 
-  async findByName(nome: string) {  
-    const pais = await this.geoPaisRepository.findOne({ nome });
-
+  async findById(id: string) {
+    const pais = await this.geoPaisRepository.findOne(id);
+    if(!pais)
+      throw new CustomError({
+        code: 'USER_NOT_FOUND',
+        message: 'User not found',
+        status: 404,
+      });
+    
     return pais;
   }
 }
