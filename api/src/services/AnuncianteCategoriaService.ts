@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
 
 import { getCustomRepository, Repository } from 'typeorm';
+import { CustomError } from 'express-handler-errors';
+import dateFormat  from 'dateformat';
 
 import { AnuncianteCategoria } from './../entities/AnuncianteCategoria';
 import { AnuncianteCategoriaRepository } from '../repositories/AnuncianteCategoriaRepository';
@@ -11,68 +13,94 @@ class AnuncianteCategoriaService {
   constructor() {
     this.anuncianteCategoriaRepository = getCustomRepository(AnuncianteCategoriaRepository);
   }
+  async create(params: AnuncianteCategoria) {
+    
+    const schema = Yup.object().shape({
+      nome: Yup.string().required(),
+      slug: Yup.string().required(),
+      fontIcon: Yup.string().required(),
+    });
 
-  async create(_anunciante: AnuncianteCategoria) {
+    if (!(await schema.isValid(params))) {
+      throw new CustomError({
+        code: 'VALIDATION_FAILS',
+        message: 'Validation fails',
+        status: 400,
+      });
+    }
 
-    // const schema = Yup.object().shape({
-    //   problem: Yup.string().required(),
-    //   message: Yup.string().required(),
-    //   email: Yup.string().email().required(),
-    // });
+    let _categoria = new AnuncianteCategoria();
+    const datejoined = dateFormat(new Date(), "yyyy-mm-dd hh:MM:sso");
+    _categoria.nome = params.nome;
+    _categoria.slug = params.slug;
+    _categoria.fontIcon = params.fontIcon;
+    _categoria.dataCadastro = <any>datejoined;
+    _categoria.dataAlteracao = <any>datejoined;
+    _categoria.ativo = params.ativo ?? null;
 
-    // if (!(await schema.isValid(req.body))) {
-    //   return res.status(400).json({ error: 'Validation fails' });
-    // }
+      const nameAlreadyExists = await this.anuncianteCategoriaRepository.findOne({nome: _categoria.nome});
+  
+      console.log(nameAlreadyExists);
 
-    const { 
-      id, 
-      nome,
-      slug,
-      fontIcon,
-      dataCadastro,
-      dataAlteracao,
-      ativo } = _anunciante;
-      
-    // const anuncianteAlreadyExists = await this.anuncianteCategoriaRepository.findOne({email});
+      if(nameAlreadyExists) {
+        throw new CustomError({
+          code: 'NAME_ALREADY_EXIST',
+          message: 'Name already exist',
+          status: 409,
+        });
+      }
 
-    // if(anuncianteAlreadyExists) {
-    //   return anuncianteAlreadyExists;
-    // }
-
-    const anunciante = await this.anuncianteCategoriaRepository.create(_anunciante);
-
+    const anunciante = await this.anuncianteCategoriaRepository.create(_categoria);
     await this.anuncianteCategoriaRepository.save(anunciante);
 
     return anunciante;
-
+    
   }
 
-  // async update(req, res) {
-  //   const schema = Yup.object().shape({
-  //     solved: Yup.boolean().required(),
-  //     soluction: Yup.string().required(),
-  //   });
+  async update(id: number, params: AnuncianteCategoria) {
 
-  //   if (!(await schema.isValid(req.body))) {
-  //     return res.status(400).json({ error: 'Validation fails' });
-  //   }
+    const schema = Yup.object().shape({
+      nome: Yup.string().required(),
+      slug: Yup.string().required(),
+      fontIcon: Yup.string().required(),
+    });
 
-  //   const { 
-  //     solved,
-  //     soluction } = await AnuncianteCategoria.update(req.body);
+    if (!(await schema.isValid(params))) {
+      throw new CustomError({
+        code: 'VALIDATION_FAILS',
+        message: 'Validation fails',
+        status: 400,
+      });
+    }
 
-  //   return res.json({
-  //     claim_id, 
-  //     problem,
-  //     message,
-  //     email,
-  //     company,
-  //     product,
-  //     dateRegister,
-  //     solved,
-  //     soluction
-  //   });
-  // }
+    let _categoria = new AnuncianteCategoria();
+    const datejoined = dateFormat(new Date(), "yyyy-mm-dd hh:MM:sso");
+    _categoria.nome = params.nome;
+    _categoria.slug = params.slug;
+    _categoria.fontIcon = params.fontIcon;
+    _categoria.dataAlteracao = <any>datejoined;
+    _categoria.ativo = params.ativo ?? null;
+
+
+    const anunciante = await this.anuncianteCategoriaRepository
+    .update({id: id}, _categoria);
+
+    return anunciante;
+  }
+
+
+  async findOne(id: string) {  
+    const usuario = await this.anuncianteCategoriaRepository.findOne(id);
+
+    if (!usuario)
+    throw new CustomError({
+      code: 'USER_NOT_FOUND',
+      message: 'User not found',
+      status: 404,
+    });
+
+    return usuario;
+  }
 }
 
 export { AnuncianteCategoriaService };

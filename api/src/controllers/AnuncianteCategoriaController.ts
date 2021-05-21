@@ -2,36 +2,48 @@ import { Request, Response } from "express";
 
 import { AnuncianteCategoriaService } from "../services/AnuncianteCategoriaService";
 
-class AnuncianteAnuncianteController {
+class AnuncianteCategoriaController {
   async create (req: Request, res: Response): Promise<Response> {
-    const _anunciante = req.body;
+    const _categoria = req.body;
     const anuncianteCategoria = new AnuncianteCategoriaService();
-
-    try { 
-      const anunciante = await anuncianteCategoria.create(_anunciante);
-
+    
+    try {
+      const anunciante = await anuncianteCategoria.create(_categoria);
       return res.json(anunciante);
     } catch (err) {
       res.status(400).json({ 
-        message: err.message 
+        message: err
       });
     }
   }
 
-  // async findOne(req: Request, res: Response): Promise<Response> {
-  //   const { nome } = req.body;
-  //   const anuncianteAnunciante = new AnuncianteAnuncianteService();
+  async update (req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const _categoria = req.body;
+    const anuncianteCategoria = new AnuncianteCategoriaService();
+    
+    try {
+      const anunciante = await anuncianteCategoria.update(<any>id, _categoria);
+      return res.json(anunciante);
+    } catch (err) {
+      res.status(400).json({ 
+        message: err
+      });
+    }
+  }
 
-  //   try { 
-  //     const cidade = await anuncianteAnunciante.findByName(nome);
+  async findById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const anuncianteCategoria = new AnuncianteCategoriaService();
 
-  //     return res.json(cidade);
-  //   } catch (err) {
-  //     res.status(400).json({ 
-  //       message: err.message 
-  //     });
-  //   }
-  // }
+    try { 
+      const response = await anuncianteCategoria.findOne(id);
+
+      return res.json(response);
+    } catch (e) {
+      res.status(e.error.status).json(e.error.message);
+    }
+  }
 }
 
-export { AnuncianteAnuncianteController };
+export { AnuncianteCategoriaController };

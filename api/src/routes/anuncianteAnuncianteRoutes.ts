@@ -6,7 +6,7 @@ const anuncianteAnuncianteRoutes = Router();
 const anuncianteController = new AnuncianteAnuncianteController();
 
 anuncianteAnuncianteRoutes.post("/", anuncianteController.create);
-
-//anuncianteAnuncianteRoutes.get("/", anuncianteController.findOne);
+anuncianteAnuncianteRoutes.put("/:id", anuncianteController.update);
+anuncianteAnuncianteRoutes.get("/", anuncianteController.findByEmail);
 
 export { anuncianteAnuncianteRoutes };

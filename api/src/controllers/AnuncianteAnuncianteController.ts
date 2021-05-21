@@ -17,20 +17,48 @@ class AnuncianteAnuncianteController {
     }
   }
 
-  // async findOne(req: Request, res: Response): Promise<Response> {
-  //   const { nome } = req.body;
-  //   const anuncianteAnunciante = new AnuncianteAnuncianteService();
+  async update (req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const _anunciante = req.body;
+    const anuncianteAnunciante = new AnuncianteAnuncianteService();
+    
+    try {
+      const anunciante = await anuncianteAnunciante.update(<any>id, _anunciante);
+      return res.json(anunciante);
+    } catch (err) {
+      res.status(400).json({ 
+        message: err
+      });
+    }
+  }
 
-  //   try { 
-  //     const cidade = await anuncianteAnunciante.findByName(nome);
+  async findByEmail(req: Request, res: Response): Promise<Response> {
+    const { email } = req.body;
+    const anuncianteAnunciante = new AnuncianteAnuncianteService();
 
-  //     return res.json(cidade);
-  //   } catch (err) {
-  //     res.status(400).json({ 
-  //       message: err.message 
-  //     });
-  //   }
-  // }
+    try { 
+      const user = await anuncianteAnunciante.findByEmail(email);
+
+      return res.json(user);
+    } catch (err) {
+      res.status(400).json({ 
+        message: err.message 
+      });
+    }
+  }
+
+  async findById(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const anuncianteAnunciante = new AnuncianteAnuncianteService();
+
+    try { 
+      const response = await anuncianteAnunciante.findOne(id);
+
+      return res.json(response);
+    } catch (e) {
+      res.status(e.error.status).json(e.error.message);
+    }
+  }
 }
 
 export { AnuncianteAnuncianteController };
