@@ -98,7 +98,7 @@ class UsuarioUsuarioService {
     return usuario;
   }
 
-  async update(id: string, params: UsuarioUsuario) {
+  async update(id: number, params: UsuarioUsuario) {
     const schema = Yup.object().shape({
       firstName: Yup.string().required(),
       lastName: Yup.string().required(),
@@ -135,9 +135,9 @@ class UsuarioUsuarioService {
         status: 409,
       });
     }
-
-    const usuario = await this.usuarioUsuarioRepository.save(_usuario);
-
+    
+    const usuario = await this.usuarioUsuarioRepository.update({id: id}, _usuario);
+   
     if(!usuario) {
       throw new CustomError({
         code: 'USERNAME_ALREADY_IN_USE',

@@ -47,9 +47,9 @@ class UsuarioUsuarioController {
     const usuarioUsuarioService = new UsuarioUsuarioService();
 
     try { 
-      const response = await usuarioUsuarioService.update(id, _usuario);
+      const response = await usuarioUsuarioService.update(<any>id, _usuario);
 
-      return res.status(204).json(response.id);
+      return res.status(204).json();
     } catch (e) {
       res.status(e.error.status).json(e.error.message);
     }
