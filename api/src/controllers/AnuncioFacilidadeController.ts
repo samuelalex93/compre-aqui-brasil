@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 
-import { AnuncioDescricaoService } from "../services/AnuncioDescricaoService";
+import { AnuncioFacilidadeService } from "../services/AnuncioFacilidadeService";
 
-class AnuncioDescricaoController {
+class AnuncioFacilidadeController {
   async create (req: Request, res: Response): Promise<Response> {
-    const anuncioDescricao = req.body;
-    const anuncioDescricaoService = new AnuncioDescricaoService();
+    const anuncioFacilidade = req.body;
+    const anuncioFacilidadeService = new AnuncioFacilidadeService();
 
     try { 
-      const response = await anuncioDescricaoService.create(anuncioDescricao);
+      const response = await anuncioFacilidadeService.create(anuncioFacilidade);
       return res.status(201).json(response);
     } catch (e) {
       return res.status(e.error.status).json(e.error.message);
@@ -17,10 +17,10 @@ class AnuncioDescricaoController {
 
   async findOne(req: Request, res: Response): Promise<Response> {
     const anuncianteId = req.params.id;
-    const anuncioDescricaoService = new AnuncioDescricaoService();
+    const anuncioFacilidadeService = new AnuncioFacilidadeService();
 
     try { 
-      const response = await anuncioDescricaoService.findByAnuncianteId(anuncianteId);
+      const response = await anuncioFacilidadeService.findByAnuncianteId(anuncianteId);
 
       return res.json(response);
     } catch (e) {
@@ -30,11 +30,11 @@ class AnuncioDescricaoController {
 
   async update(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const anuncioDescricao = req.body;
-    const anuncioDescricaoService = new AnuncioDescricaoService();
+    const anuncioFacilidade = req.body;
+    const anuncioFacilidadeService = new AnuncioFacilidadeService();
 
     try { 
-      const response = await anuncioDescricaoService.update(<any>id, anuncioDescricao);
+      const response = await anuncioFacilidadeService.update(<any>id, anuncioFacilidade);
 
       return res.status(204).json();
     } catch (e) {
@@ -44,10 +44,10 @@ class AnuncioDescricaoController {
 
   async delete(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
-    const anuncioDescricaoService = new AnuncioDescricaoService();
+    const anuncioFacilidadeService = new AnuncioFacilidadeService();
 
     try { 
-      const response = await anuncioDescricaoService.delete(id);
+      const response = await anuncioFacilidadeService.delete(id);
 
       return res.status(204).json(response);
     } catch (e) {
@@ -60,4 +60,4 @@ class AnuncioDescricaoController {
   }
 }
 
-export { AnuncioDescricaoController };
+export { AnuncioFacilidadeController };
